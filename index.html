@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#082d20">
+<meta name="description" content="Soccer Star: Rumo à Super Bola de Ouro">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Soccer Star</title>
+<style>
+:root{--bg:#071c16;--panel:#103629;--green:#1c9b58;--gold:#ffd34d;--muted:#a9c7b8;--white:#f5fff9}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#14583b,#071c16 62%);color:var(--white);font-family:system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+.app{max-width:520px;margin:auto;padding:18px 16px 34px}.top{display:flex;justify-content:space-between;align-items:center;margin:4px 0 18px}.brand{font-weight:950;letter-spacing:1px;font-size:20px}.coin{background:#173e30;border:1px solid #31694e;padding:8px 12px;border-radius:99px;font-weight:800;color:var(--gold)}
+.screen{display:none}.screen.active{display:block}.hero{text-align:center;padding:24px 16px;border:1px solid #2d7251;border-radius:24px;background:linear-gradient(145deg,#176b42,#0c3829);box-shadow:0 18px 45px #0005}.trophy{font-size:76px;filter:drop-shadow(0 8px 8px #0005)}h1{font-size:29px;line-height:1.05;margin:8px 0}p{color:var(--muted);line-height:1.45}.btn{border:0;border-radius:14px;background:var(--gold);color:#1e281d;font-weight:900;padding:14px 18px;font-size:16px;width:100%;margin-top:12px;cursor:pointer}.btn.secondary{background:#1b503a;color:#fff;border:1px solid #397858}.btn:disabled{opacity:.4}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.stat{background:#103629;border:1px solid #245941;border-radius:14px;padding:12px;text-align:center}.stat b{display:block;font-size:20px}.stat small{color:var(--muted)}.panel{background:#103629;border:1px solid #245941;border-radius:18px;padding:16px;margin-top:14px}.bar{height:9px;background:#234b39;border-radius:99px;overflow:hidden;margin:10px 0}.bar span{display:block;height:100%;background:var(--gold);width:0%}.goal{position:relative;height:230px;border:5px solid #e9f3ec;border-bottom-width:9px;border-radius:12px 12px 3px 3px;margin:20px 4px 14px;background:repeating-linear-gradient(90deg,#ffffff12 0 2px,transparent 2px 32px),repeating-linear-gradient(0deg,#ffffff12 0 2px,transparent 2px 28px),linear-gradient(#27894c,#17683d);overflow:hidden;box-shadow:0 8px 0 #0b3b28}.keeper{position:absolute;top:36px;left:50%;transform:translateX(-50%);font-size:52px;transition:left .25s}.ball{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:32px}.lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.lane{padding:14px 4px;background:#1b503a;color:white;border:1px solid #4c8b67;border-radius:12px;font-weight:800}.lane:active{transform:scale(.97)}.message{text-align:center;font-weight:800;min-height:28px;margin:12px 0;color:var(--gold)}.nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #28533f}.item:last-child{border:0}.tag{font-size:12px;color:var(--gold)}.win{text-align:center;padding:24px}.win .trophy{font-size:100px}
+</style>
+</head>
+<body>
+<div class="app">
+ <div class="top"><div class="brand">⚽ SOCCER STAR</div><div class="coin">🪙 <span id="coins">0</span></div></div>
+ <section id="home" class="screen active">
+  <div class="hero"><div class="trophy">🏆</div><h1>RUMO À<br>SUPER BOLA DE OURO</h1><p>Mostre seu talento. Vença 100 desafios e entre para a história!</p><button class="btn" onclick="show('game')">JOGAR AGORA</button></div>
+  <div class="stats"><div class="stat"><b id="homeLevel">1</b><small>Fase</small></div><div class="stat"><b id="homeGoals">0</b><small>Gols</small></div><div class="stat"><b id="homeCoins">0</b><small>Moedas</small></div></div>
+  <div class="panel"><b>🏅 Sua carreira</b><div class="bar"><span id="homeProgress"></span></div><small id="progressText">0 de 100 fases concluídas</small></div>
+  <div class="nav"><button class="btn secondary" onclick="show('shop')">🛒 Loja</button><button class="btn secondary" onclick="show('career')">📈 Carreira</button></div>
+ </section>
+ <section id="game" class="screen">
+  <div class="panel"><div style="display:flex;justify-content:space-between"><b id="phaseTitle">FASE 1</b><b id="phaseType" class="tag">DESAFIO</b></div><div class="bar"><span id="gameProgress"></span></div><small id="challenge">Marque um gol para avançar.</small></div>
+  <div class="goal"><div class="keeper" id="keeper">🧤</div><div class="ball" id="ball">⚽</div></div>
+  <div style="text-align:center;font-weight:800">Escolha o canto do chute</div>
+  <div class="lanes"><button class="lane" onclick="shoot(0)">⬅️ Esquerda</button><button class="lane" onclick="shoot(1)">⬆️ Centro</button><button class="lane" onclick="shoot(2)">➡️ Direita</button></div>
+  <div id="message" class="message">Boa sorte, craque!</div>
+  <button id="nextBtn" class="btn" style="display:none" onclick="nextLevel()">PRÓXIMA FASE</button>
+  <button class="btn secondary" onclick="show('home')">VOLTAR AO INÍCIO</button>
+ </section>
+ <section id="shop" class="screen">
+  <div class="panel"><h2>🛒 Loja do jogador</h2><p>Use suas moedas para melhorar sua carreira.</p>
+   <div class="item"><div>👟 Chuteira de precisão<br><small>Uma segunda chance por fase (visual/recurso futuro)</small></div><b>🪙 100</b></div>
+   <div class="item"><div>🧤 Luvas de goleiro<br><small>Item especial de coleção</small></div><b>🪙 150</b></div>
+   <div class="item"><div>✨ Uniforme dourado<br><small>Visual de campeão</small></div><b>🪙 250</b></div>
+   <p class="tag">Itens de coleção: a loja será expandida nas próximas versões.</p>
+  </div><button class="btn secondary" onclick="show('home')">VOLTAR</button>
+ </section>
+ <section id="career" class="screen">
+  <div class="panel"><h2>📈 Minha carreira</h2><div class="stats"><div class="stat"><b id="careerLevel">1</b><small>Fase atual</small></div><div class="stat"><b id="careerGoals">0</b><small>Gols</small></div><div class="stat"><b id="careerMiss">0</b><small>Defesas</small></div></div><div class="bar"><span id="careerProgress"></span></div><p id="careerText">Sua jornada está começando!</p></div><button class="btn secondary" onclick="show('home')">VOLTAR</button>
+ </section>
+ <section id="prize" class="screen"><div class="hero win"><div class="trophy">🏆</div><h1>VOCÊ CONSEGUIU!</h1><h2 style="color:var(--gold)">SUPER BOLA DE OURO</h2><p>Você completou as 100 fases e virou uma lenda do futebol!</p><button class="btn" onclick="show('home')">VER MINHA CARREIRA</button></div></section>
+</div>
+<script>
+const KEY='soccerStarSaveV1';
+let data={level:1,goals:0,misses:0,coins:0,completed:0};
+try{data={...data,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){}
+let keeperLane=1,attemptDone=false;
+function save(){localStorage.setItem(KEY,JSON.stringify(data));updateUI()}
+function updateUI(){
+ document.getElementById('coins').textContent=data.coins;
+ ['homeLevel','careerLevel'].forEach(id=>document.getElementById(id).textContent=data.level);
+ ['homeGoals','careerGoals'].forEach(id=>document.getElementById(id).textContent=data.goals);
+ document.getElementById('homeCoins').textContent=data.coins;
+ document.getElementById('careerMiss').textContent=data.misses;
+ let pct=data.completed;['homeProgress','gameProgress','careerProgress'].forEach(id=>document.getElementById(id).style.width=pct+'%');
+ document.getElementById('progressText').textContent=data.completed+' de 100 fases concluídas';
+ document.getElementById('careerText').textContent=data.completed===0?'Sua jornada está começando!':`Você já superou ${data.completed} desafio(s). Continue avançando!`;
+}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');updateUI();if(id==='game')prepareLevel()}
+function prepareLevel(){
+ attemptDone=false;document.getElementById('phaseTitle').textContent='FASE '+data.level;
+ document.getElementById('phaseType').textContent=data.level%10===0?'DESAFIO ESPECIAL':'DESAFIO';
+ document.getElementById('challenge').textContent=data.level%10===0?'Desafio especial! Acerte o gol para avançar.':'Marque um gol para avançar.';
+ keeperLane=Math.floor(Math.random()*3);
+ document.getElementById('keeper').style.left=['18%','50%','82%'][keeperLane];
+ document.getElementById('ball').style.left='50%';
+ document.getElementById('message').textContent='Escolha o canto do chute!';
+ document.getElementById('nextBtn').style.display='none';
+ document.querySelectorAll('.lane').forEach(b=>b.disabled=false);
+}
+function shoot(lane){
+ if(attemptDone)return;
+ attemptDone=true;
+ let msg=document.getElementById('message');
+ document.querySelectorAll('.lane').forEach(b=>b.disabled=true);
+ document.getElementById('ball').style.left=['18%','50%','82%'][lane];
+ if(lane===keeperLane){data.misses++;msg.textContent='🧤 O goleiro defendeu! Tente novamente.';attemptDone=false;document.querySelectorAll('.lane').forEach(b=>b.disabled=false);document.getElementById('ball').style.left='50%';}
+ else{data.goals++;data.coins+=10+(data.level%10===0?20:0);data.completed=Math.max(data.completed,data.level);msg.textContent=data.level===100?'🏆 GOLAÇO! A SUPER BOLA DE OURO É SUA!':'⚽ GOLAÇO! + moedas';if(data.level===100){save();setTimeout(()=>show('prize'),900)}else{document.getElementById('nextBtn').style.display='block'} }
+ save();
+}
+function nextLevel(){data.level=Math.min(100,data.level+1);save();prepareLevel()}
+updateUI();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body></html>
